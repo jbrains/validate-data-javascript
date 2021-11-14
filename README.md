@@ -7,6 +7,8 @@ This project provides a place for participants in [The World's Best Intro to TDD
 After you clone this repository, run the tests.
 
 ```bash
+$ npm install -g pta    # the test runner
+$ npm install    # install the project's packages
 $ npm run test
 $ pta test/**/*.js    # the current implementation of `npm run test`
 ```
