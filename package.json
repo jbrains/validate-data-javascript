@@ -1,0 +1,24 @@
+{
+  "name": "validate-data-javascript",
+  "version": "0.1.0",
+  "description": "Validating data in Javascript",
+  "type": "module",
+  "scripts": {
+    "test": "pta"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jbrains/validate-data-javascript.git"
+  },
+  "keywords": [
+    "TDD",
+    "evolutionary",
+    "design"
+  ],
+  "author": "J. B. Rainsberger and friends",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/jbrains/validate-data-javascript/issues"
+  },
+  "homepage": "https://github.com/jbrains/validate-data-javascript#readme"
+}
