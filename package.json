@@ -4,7 +4,7 @@
   "description": "Validating data in Javascript",
   "type": "module",
   "scripts": {
-    "test": "pta"
+    "test": "pta test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/jbrains/validate-data-javascript/issues"
   },
-  "homepage": "https://github.com/jbrains/validate-data-javascript#readme"
+  "homepage": "https://github.com/jbrains/validate-data-javascript#readme",
+  "devDependencies": {
+    "zora": "^5.0.0"
+  }
 }
