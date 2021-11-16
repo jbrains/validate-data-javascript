@@ -64,7 +64,6 @@ test(`even or positive?`, (assertions) => {
 });
 
 test(`failure message?`, (assertions) => {
-  assertions.equal(isEven(1), "randomtext");
   assertions.equal(or(isEven, isPositive)(-4), true);
   assertions.equal(or(isEven, isPositive)(-17), false);
 });
