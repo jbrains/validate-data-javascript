@@ -1,10 +1,14 @@
 import { test } from "zora";
 
-test(`Is this thing on?`, (assertions) => {
-  assertions.ok(false, `This fails intentionally.`);
+function isPositive(num){
+  return false;
+}
+
+test(`positive?`, (assertions) => {
+  
   assertions.equal(
+    isPositive(37),
     true,
-    false,
-    `true should be false, which is the opposite order of the xUnit tradition.`
+    `37 is a positive number and our validator should figure that out.`
   );
 });
