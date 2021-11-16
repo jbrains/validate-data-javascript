@@ -4,6 +4,7 @@ function isPositive(num) {
   return num > 0;
 }
 
+// REFACTOR Extract a combinator for not(rule)
 function isNegative(num) {
   return !isPositive(num);
 }
@@ -13,19 +14,23 @@ function isEven(num) {
 }
 
 function isEvenAndNegative(num) {
-  return isEven(num) && isNegative(num);
+  return and(isEven, isNegative)(num);
 }
 
 function isEvenAndPositive(num) {
   return and(isEven, isPositive)(num);
 }
 
+// CONTRACT f: Integer -> Boolean
+// CONTRACT g: Integer -> Boolean
 function and(f, g) {
   return function (num) {
     return f(num) && g(num);
   };
 }
 
+// CONTRACT f: Integer -> Boolean
+// CONTRACT g: Integer -> Boolean
 function or(f, g) {
   return function (num) {
     return f(num) || g(num);
