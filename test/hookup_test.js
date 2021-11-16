@@ -4,50 +4,25 @@ function isPositive(num) {
   return num > 0;
 }
 
-function isPositiveBetter(num) {
-  return { result: num > 0, message: "-1 is not positive" };
-}
-
 function isNegative(num) {
-  return !isPositiveBetter(num).result;
-}
-
-function isNegativeBetter(num) {
-  return {
-    result: !isPositiveBetter(num).result,
-  };
+  return !isPositive(num);
 }
 
 function isEven(num) {
   return num % 2 === 0;
 }
-function isEvenBetter(num) {
-  var result = isEven(num);
-  var msg = result ? "" : num + " is not even";
 
-  return { result: result, message: msg };
-}
 function isEvenAndNegative(num) {
-  return isEvenBetter(num).result && isNegative(num);
-}
-function isEvenAndPositive(num) {
-  return and(isEvenBetter, isPositive)(num);
+  return isEven(num) && isNegative(num);
 }
 
-function isEvenAndNegativeBetter(num) {
-  return {
-    result: isEvenBetter(num).result && isNegative(num),
-  };
-}
-function isEvenAndPositiveBetter(num) {
-  return {
-    result: and(isEvenBetter, isPositive)(num),
-  };
+function isEvenAndPositive(num) {
+  return and(isEven, isPositive)(num);
 }
 
 function and(f, g) {
   return function (num) {
-    return f(num).result && g(num);
+    return f(num) && g(num);
   };
 }
 
@@ -58,32 +33,27 @@ function or(f, g) {
 }
 
 test(`positive?`, (assertions) => {
-  assertions.equal(isPositiveBetter(37).result, true);
-  assertions.equal(isPositiveBetter(-1).result, false);
-  assertions.equal(isPositiveBetter(-1).message, "-1 is not positive");
-  assertions.equal(isPositiveBetter(-2).message, "-2 is not positive");
+  assertions.equal(isPositive(37), true);
+  assertions.equal(isPositive(-1), false);
 });
 
 test(`negative?`, (assertions) => {
-  assertions.equal(isNegativeBetter(-1).result, true);
+  assertions.equal(isNegative(-1), true);
 });
 
 test(`even?`, (assertions) => {
-  assertions.equal(isEvenBetter(2).result, true);
-  assertions.equal(isEvenBetter(-1).result, false);
-  assertions.equal(isEvenBetter(1).message, "1 is not even");
-  assertions.equal(isEvenBetter(3).message, "3 is not even");
-  assertions.equal(isEvenBetter(2).message, "");
+  assertions.equal(isEven(2), true);
+  assertions.equal(isEven(-1), false);
 });
 
 test(`even and negative?`, (assertions) => {
-  assertions.equal(isEvenAndNegativeBetter(-1).result, false);
-  assertions.equal(isEvenAndNegativeBetter(-2).result, true);
+  assertions.equal(isEvenAndNegative(-1), false);
+  assertions.equal(isEvenAndNegative(-2), true);
 });
 
 test(`even and positive?`, (assertions) => {
-  assertions.equal(isEvenAndPositiveBetter(1).result, false);
-  assertions.equal(isEvenAndPositiveBetter(2).result, true);
+  assertions.equal(isEvenAndPositive(1), false);
+  assertions.equal(isEvenAndPositive(2), true);
 });
 
 test(`even or positive?`, (assertions) => {
