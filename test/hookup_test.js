@@ -41,9 +41,18 @@ test(`even?`, (assertions) => {
   );
 });
 
+function isEvenAndNegative(number)
+{
+  return false;
+}
+
 test(`even and negative?`, (assertions) => {
   assertions.equal(
-      isEven(-1),
+      isEvenAndNegative(-1),
       false
   );
+  assertions.equal(
+    isEvenAndNegative(-1),
+    false
+);
 });
