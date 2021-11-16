@@ -1,3 +1,6 @@
 # vendor libraries
 node_modules
 
+# IDEs
+.idea
+.vscode
