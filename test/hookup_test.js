@@ -1,6 +1,6 @@
 import { test } from "zora";
 
-function isPositive(num){
+function isPositive(num) {
   return num > 0;
 }
 
@@ -9,50 +9,42 @@ function isNegative(num) {
 }
 
 test(`positive?`, (assertions) => {
-  assertions.equal(
-    isPositive(37),
-    true
-  );
-  assertions.equal(
-    isPositive(-1),
-    false
-  );
+  assertions.equal(isPositive(37), true);
+  assertions.equal(isPositive(-1), false);
 });
 
 test(`negative?`, (assertions) => {
-  assertions.equal(
-    isNegative(-1),
-    true
-  );
+  assertions.equal(isNegative(-1), true);
 });
 
-
-function isEven (num) {
+function isEven(num) {
   return num % 2 === 0;
 }
 test(`even?`, (assertions) => {
-  assertions.equal(
-      isEven(-1),
-      false
-  );
-  assertions.equal(
-      isEven(2),
-      true
-  );
+  assertions.equal(isEven(-1), false);
+  assertions.equal(isEven(2), true);
 });
 
-function isEvenAndNegative(number)
-{
-  return false;
+function isEvenAndNegative(num) {
+  return isEven(num) && isNegative(num);
 }
 
 test(`even and negative?`, (assertions) => {
-  assertions.equal(
-      isEvenAndNegative(-1),
-      false
-  );
-  assertions.equal(
-    isEvenAndNegative(-1),
-    false
-);
+  assertions.equal(isEvenAndNegative(-1), false);
+  assertions.equal(isEvenAndNegative(-2), true);
+});
+
+function isEvenAndPositive(num) {
+  return isEven(num) && isPositive(num);
+}
+
+function combine(f, g) {
+  return function (num) {
+    return f(num) && g(num);
+  };
+}
+
+test(`even and positive?`, (assertions) => {
+  assertions.equal(isEvenAndPositive(1), false);
+  assertions.equal(isEvenAndPositive(2), true);
 });
