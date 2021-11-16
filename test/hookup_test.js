@@ -1,4 +1,6 @@
-import { test } from "zora";
+import {
+  test
+} from "zora";
 
 function isPositive(num) {
   return num > 0;
@@ -55,9 +57,14 @@ test(`even and positive?`, (assertions) => {
   assertions.equal(isEvenAndPositive(2), true);
 });
 
-
 test(`even or positive?`, (assertions) => {
   assertions.equal(or(isEven, isPositive)(1), true);
+  assertions.equal(or(isEven, isPositive)(-4), true);
+  assertions.equal(or(isEven, isPositive)(-17), false);
+});
+
+test(`failure message?`, (assertions) => {
+  assertions.equal(isEven(1), "randomtext");
   assertions.equal(or(isEven, isPositive)(-4), true);
   assertions.equal(or(isEven, isPositive)(-17), false);
 });
