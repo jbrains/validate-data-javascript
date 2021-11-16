@@ -35,16 +35,29 @@ test(`even and negative?`, (assertions) => {
 });
 
 function isEvenAndPositive(num) {
-  return isEven(num) && isPositive(num);
+  return and(isEven, isPositive)(num);
 }
 
-function combine(f, g) {
+function and(f, g) {
   return function (num) {
     return f(num) && g(num);
+  };
+}
+
+function or(f, g) {
+  return function (num) {
+    return f(num) || g(num);
   };
 }
 
 test(`even and positive?`, (assertions) => {
   assertions.equal(isEvenAndPositive(1), false);
   assertions.equal(isEvenAndPositive(2), true);
+});
+
+
+test(`even or positive?`, (assertions) => {
+  assertions.equal(or(isEven, isPositive)(1), true);
+  assertions.equal(or(isEven, isPositive)(-4), true);
+  assertions.equal(or(isEven, isPositive)(-17), false);
 });
