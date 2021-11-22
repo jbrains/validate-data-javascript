@@ -42,14 +42,18 @@ test(`positive?`, (assertions) => {
   assertions.equal(isPositive(-1), false);
 });
 
+function foo(num, f, failureMessage) {
+  let result = f(num);
+  return result ? {result} : {result, error: failureMessage(num)};
+}
+
 test(`positive result?`, (assertions) => {
-  function validateIsPositive(num) {
-    let result = isPositive(num);
-    return result ? { result } : { result, error: "-1 is not positive" };
+  function validatePositive(num) {
+    return foo(num, isPositive, (num) => `${num} is not positive`);
   }
 
-  assertions.equal(validateIsPositive(37), { result: true });
-  assertions.equal(validateIsPositive(-1), {
+  assertions.equal(validatePositive(37), { result: true });
+  assertions.equal(validatePositive(-1), {
     result: false,
     error: "-1 is not positive",
   });
