@@ -97,7 +97,11 @@ test(`even or positive?`, (assertions) => {
 });
 
 function foo(validators) {
-  return () => ({ result: true, errors: [] });
+  if (validators.length === 0) {
+    return () => ({ result: true, errors: [] });
+  } else {
+    return (num) => ({ validators[0](num) });
+  }
 }
 
 test(`no validations`, (assertions) => {
@@ -113,5 +117,8 @@ test(`single validation`, (assertions) => {
       (num) => "::it doesn't matter::"
     ),
   ]);
-  assertions.equal(testValidator(1), { result: true, errors: [] });
+  assertions.equal(testValidator(1), {
+    result: false,
+    errors: ["::it doesn't matter::"],
+  });
 });
