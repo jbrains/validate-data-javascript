@@ -46,6 +46,10 @@ function validatePositive(num) {
   return validate(num, isPositive, (num) => `${num} is not positive`);
 }
 
+function validateNegative(num) {
+  return validate(num, isNegative, (num) => `${num} is not negative`);
+}
+
 test(`positive result?`, (assertions) => {
   assertions.equal(validatePositive(37), { result: true });
   assertions.equal(validatePositive(-1), {
@@ -57,6 +61,7 @@ test(`positive result?`, (assertions) => {
 test(`negative?`, (assertions) => {
   assertions.equal(isNegative(-1), true);
   assertions.equal(validateNegative(-1), { result: true});
+  assertions.equal(validateNegative(1), { result: false, error: "1 is not negative"});
 });
 
 test(`even?`, (assertions) => {
