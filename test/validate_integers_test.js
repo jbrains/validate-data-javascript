@@ -51,7 +51,8 @@ test(`positive result?`, (assertions) => {
     return { result: true }
   }
 
-  assertions.equal(convert(isPositiveFoo(37)), true);
+  // assertions.equal(convert(isPositiveFoo(37)), true);
+  assertions.equal(isPositiveFoo(37), { result: true });
 });
 
 test(`negative?`, (assertions) => {
