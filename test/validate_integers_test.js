@@ -39,7 +39,7 @@ function or(f, g) {
 
 function validate(num, validation, failureMessage) {
   let result = validation(num);
-  return result ? {result} : {result, error: failureMessage(num)};
+  return result ? { result } : { result, error: failureMessage(num) };
 }
 
 function validatePositive(num) {
@@ -60,18 +60,24 @@ test(`positive result?`, (assertions) => {
 
 test(`negative?`, (assertions) => {
   assertions.equal(isNegative(-1), true);
-  assertions.equal(validateNegative(-1), { result: true});
-  assertions.equal(validateNegative(1), { result: false, error: "1 is not negative"});
+  assertions.equal(validateNegative(-1), { result: true });
+  assertions.equal(validateNegative(1), {
+    result: false,
+    error: "1 is not negative",
+  });
 });
 
-function validateEven (num) {
+function validateEven(num) {
   return validate(num, isEven, (num) => `${num} is not even`);
 }
 
 test(`even?`, (assertions) => {
   assertions.equal(validateEven(2), { result: true });
   assertions.equal(validateEven(3), { result: false, error: "3 is not even" });
-  assertions.equal(validateEven(-1), { result: false, error: "-1 is not even" });
+  assertions.equal(validateEven(-1), {
+    result: false,
+    error: "-1 is not even",
+  });
 });
 
 test(`even and negative?`, (assertions) => {
@@ -91,10 +97,21 @@ test(`even or positive?`, (assertions) => {
 });
 
 function foo(validators) {
-  return true
+  return () => ({ result: true, errors: [] });
 }
 
-test(``, (assertions) => {
+test(`no validations`, (assertions) => {
+  let testValidator = foo([]);
+  assertions.equal(testValidator(1), { result: true, errors: [] });
+});
 
-  assertions.equal(foo([validatePositive])(1), { result: true, errors: [] })
-})
+test(`single validation`, (assertions) => {
+  let testValidator = foo([
+    validate(
+      1,
+      (num) => false,
+      (num) => "::it doesn't matter::"
+    ),
+  ]);
+  assertions.equal(testValidator(1), { result: true, errors: [] });
+});
