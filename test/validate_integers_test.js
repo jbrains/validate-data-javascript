@@ -64,9 +64,15 @@ test(`negative?`, (assertions) => {
   assertions.equal(validateNegative(1), { result: false, error: "1 is not negative"});
 });
 
+function validateEven (num) {
+  return validate(num, isEven, `${num} is not even`)
+}
+
 test(`even?`, (assertions) => {
   assertions.equal(isEven(2), true);
   assertions.equal(isEven(-1), false);
+  assertions.equal(validateEven(2), { result: true });
+  assertions.equal(validateEven(3), { result: false, error: "3 is not even" });
 });
 
 test(`even and negative?`, (assertions) => {
