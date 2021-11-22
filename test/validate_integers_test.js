@@ -101,7 +101,10 @@ function foo(validators) {
     return () => ({ result: true, errors: [] });
   } else {
     let firstValidator = validators[0];
-    return ((f) => (num) => ({ result: f(num).result, errors: [f(num).error] }))(firstValidator);
+    return ((f) => (num) => ({
+      result: f(num).result,
+      errors: [f(num).error],
+    }))(firstValidator);
   }
 }
 
@@ -112,11 +115,12 @@ test(`no validations`, (assertions) => {
 
 test(`single validation`, (assertions) => {
   let testValidator = foo([
-    (num) => validate(
-      1,
-      (num) => false,
-      (num) => "::it doesn't matter::"
-    ),
+    (num) =>
+      validate(
+        1,
+        (num) => false,
+        (num) => "::it doesn't matter::"
+      ),
   ]);
   assertions.equal(testValidator(1), {
     result: false,
