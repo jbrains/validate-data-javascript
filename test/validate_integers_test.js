@@ -37,21 +37,16 @@ function or(f, g) {
   };
 }
 
-test(`positive?`, (assertions) => {
-  assertions.equal(isPositive(37), true);
-  assertions.equal(isPositive(-1), false);
-});
-
-function foo(num, f, failureMessage) {
-  let result = f(num);
+function validate(num, validation, failureMessage) {
+  let result = validation(num);
   return result ? {result} : {result, error: failureMessage(num)};
 }
 
-test(`positive result?`, (assertions) => {
-  function validatePositive(num) {
-    return foo(num, isPositive, (num) => `${num} is not positive`);
-  }
+function validatePositive(num) {
+  return validate(num, isPositive, (num) => `${num} is not positive`);
+}
 
+test(`positive result?`, (assertions) => {
   assertions.equal(validatePositive(37), { result: true });
   assertions.equal(validatePositive(-1), {
     result: false,
@@ -61,6 +56,7 @@ test(`positive result?`, (assertions) => {
 
 test(`negative?`, (assertions) => {
   assertions.equal(isNegative(-1), true);
+  assertions.equal(validateNegative(-1), { result: true});
 });
 
 test(`even?`, (assertions) => {
