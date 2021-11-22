@@ -38,12 +38,20 @@ function or(f, g) {
 }
 
 test(`positive?`, (assertions) => {
+  assertions.equal(isPositive(37), true);
+  assertions.equal(isPositive(-1), false);
+});
+
+test(`positive result?`, (assertions) => {
   function convert(old) {
     return old.result;
   }
 
-  assertions.equal(isPositive(37), true);
-  assertions.equal(isPositive(-1), false);
+  function isPositiveFoo(num) {
+    return { result: true }
+  }
+
+  assertions.equal(convert(isPositiveFoo(37)), true);
 });
 
 test(`negative?`, (assertions) => {
