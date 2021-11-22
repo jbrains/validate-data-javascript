@@ -89,3 +89,12 @@ test(`even or positive?`, (assertions) => {
   assertions.equal(or(isEven, isPositive)(-4), true);
   assertions.equal(or(isEven, isPositive)(-17), false);
 });
+
+function foo(validators) {
+  return true
+}
+
+test(``, (assertions) => {
+
+  assertions.equal(foo([validatePositive])(1), { result: true, errors: [] })
+})
