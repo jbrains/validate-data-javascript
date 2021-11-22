@@ -38,6 +38,10 @@ function or(f, g) {
 }
 
 test(`positive?`, (assertions) => {
+  function convert(old) {
+    return old.result;
+  }
+
   assertions.equal(isPositive(37), true);
   assertions.equal(isPositive(-1), false);
 });
