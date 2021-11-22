@@ -42,17 +42,13 @@ test(`positive?`, (assertions) => {
   assertions.equal(isPositive(-1), false);
 });
 
-test(`positive result?`, (assertions) => {
-  function convert(old) {
-    return old.result;
-  }
+test(`positive result?`, (assertions) => {  
 
   function isPositiveFoo(num) {
     return { result: true }
   }
-
-  // assertions.equal(convert(isPositiveFoo(37)), true);
   assertions.equal(isPositiveFoo(37), { result: true });
+  assertions.equal(isPositiveFoo(-1), { result: false });
 });
 
 test(`negative?`, (assertions) => {
