@@ -37,18 +37,46 @@ function or(f, g) {
   };
 }
 
-test(`positive?`, (assertions) => {
-  assertions.equal(isPositive(37), true);
-  assertions.equal(isPositive(-1), false);
+function validate(num, validation, failureMessage) {
+  let result = validation(num);
+  return result ? { result } : { result, error: failureMessage(num) };
+}
+
+test(`positive result?`, (assertions) => {
+  function validatePositive(num) {
+    return validate(num, isPositive, (num) => `${num} is not positive`);
+  }
+
+  assertions.equal(validatePositive(37), { result: true });
+  assertions.equal(validatePositive(-1), {
+    result: false,
+    error: "-1 is not positive",
+  });
 });
 
 test(`negative?`, (assertions) => {
-  assertions.equal(isNegative(-1), true);
+  function validateNegative(num) {
+    return validate(num, isNegative, (num) => `${num} is not negative`);
+  }
+
+  assertions.equal(validateNegative(-1), { result: true });
+  assertions.equal(validateNegative(1), {
+    result: false,
+    error: "1 is not negative",
+  });
 });
 
 test(`even?`, (assertions) => {
-  assertions.equal(isEven(2), true);
-  assertions.equal(isEven(-1), false);
+  function validateEven(num) {
+    return validate(num, isEven, (num) => `${num} is not even`);
+  }
+
+  assertions.equal(validateEven(2), { result: true });
+  assertions.equal(validateEven(3), { result: false, error: "3 is not even" });
+  assertions.equal(validateEven(-1), {
+    result: false,
+    error: "-1 is not even",
+  });
 });
 
 test(`even and negative?`, (assertions) => {
