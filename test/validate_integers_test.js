@@ -116,8 +116,16 @@ test(`is even and negative?`, (assertions) => {
 
 test(`is even and positive?`, (assertions) => {
 
-  assertions.equal(validateAnd(-2, validateEven, validatePositive), {
+  assertions.equal(validateAnd(2, validateEven, validatePositive), {
     result: true
+  });
+  assertions.equal(validateAnd(-2, validateEven, validatePositive), {
+    result: false,
+    errors: ["-2 is not positive"]
+  });
+  assertions.equal(validateAnd(-1, validateEven, validatePositive), {
+    result: false,
+    errors: ["-1 is not even", "-1 is not positive"]
   });
 });
 
