@@ -129,6 +129,33 @@ test(`is even and positive?`, (assertions) => {
   });
 });
 
+test(`is even or negative?`, (assertions) => {
+
+    function validateOr(num, validateF, validateG) {
+        let first = validateF(num);
+        let second = validateG(num);
+
+        let result = first.result || second.result;
+        let errors = [first, second].map(each => each.error).filter(each => each);
+
+        return result ? {
+            result
+        } : {
+            result,
+            errors
+        };
+    }
+
+    assertions.equal(validateOr(-2, validateEven, validateNegative), {
+        result: true
+    });
+
+    assertions.equal(validateOr(-1, validateEven, validateNegative), {
+        result: true
+    });
+
+});
+
 test(`even?`, (assertions) => {
   assertions.equal(validateEven(2), {
     result: true
