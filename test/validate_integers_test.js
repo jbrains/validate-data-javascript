@@ -71,19 +71,22 @@ test(`negative?`, (assertions) => {
 });
 
 test(`is even and negative?`, (assertions) => {
+  function foo(num, validateF, validateG) {
+    let first = validateF(num);
+    let second = validateG(num);
+
+    let result = first.result && second.result;
+    let errors = [ first, second ].map(each => each.error).filter(each => each);
+
+    return result ? { result } : { result, errors };
+  }
+
   function validateEvenAndNegative(num) {
     let first = validateEven(num);
     let second = validateNegative(num);
 
-    let errors = [];
     let result = first.result && second.result;
-
-    if (!first.result) {
-      errors.push(first.error);
-    }
-    if (!second.result) {
-      errors.push(second.error);
-    }
+    let errors = [ first, second ].map(each => each.error).filter(each => each);
 
     return result ? { result } : { result, errors };
   }
