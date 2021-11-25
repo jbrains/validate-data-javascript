@@ -74,7 +74,7 @@ test(`is even and negative?`, (assertions) => {
   assertions.equal(validateEvenAndNegative(-2), { result: true });
   assertions.equal(validateEvenAndNegative(1), {
     result: false,
-    error: '1 is an error'
+    errors: ['1 is not even', '1 is not negative']
   });
   //assertions.equal(validateNegative(1), {
   //    result: false,
