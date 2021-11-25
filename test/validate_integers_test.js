@@ -68,7 +68,8 @@ test(`negative?`, (assertions) => {
 
 test(`is even and negative?`, (assertions) => {
   function validateEvenAndNegative(num) {
-    return validate(num, isEvenAndNegative, (num) => `${num} is not negative`);
+    let result = isEvenAndNegative(num);
+    return result ? { result } : { result, error: `${num} is not negative` };
   }
 
   assertions.equal(validateEvenAndNegative(-2), { result: true });
