@@ -1,4 +1,6 @@
-import { test } from "zora";
+import {
+  test
+} from "zora";
 
 function isPositive(num) {
   return num > 0;
@@ -39,7 +41,12 @@ function or(f, g) {
 
 function validate(num, validation, failureMessage) {
   let result = validation(num);
-  return result ? { result } : { result, error: failureMessage(num) };
+  return result ? {
+    result
+  } : {
+    result,
+    error: failureMessage(num)
+  };
 }
 
 function validateEven(num) {
@@ -50,12 +57,15 @@ function validateNegative(num) {
   return validate(num, isNegative, (num) => `${num} is not negative`);
 }
 
-test(`positive result?`, (assertions) => {
-  function validatePositive(num) {
-    return validate(num, isPositive, (num) => `${num} is not positive`);
-  }
+function validatePositive(num) {
+  return validate(num, isPositive, (num) => `${num} is not positive`);
+}
 
-  assertions.equal(validatePositive(37), { result: true });
+test(`positive result?`, (assertions) => {
+
+  assertions.equal(validatePositive(37), {
+    result: true
+  });
   assertions.equal(validatePositive(-1), {
     result: false,
     error: "-1 is not positive",
@@ -63,45 +73,70 @@ test(`positive result?`, (assertions) => {
 });
 
 test(`negative?`, (assertions) => {
-  assertions.equal(validateNegative(-1), { result: true });
+  assertions.equal(validateNegative(-1), {
+    result: true
+  });
   assertions.equal(validateNegative(1), {
     result: false,
     error: "1 is not negative",
   });
 });
 
+function validateAnd(num, validateF, validateG) {
+  let first = validateF(num);
+  let second = validateG(num);
+
+  let result = first.result && second.result;
+  let errors = [first, second].map(each => each.error).filter(each => each);
+
+  return result ? {
+    result
+  } : {
+    result,
+    errors
+  };
+}
+
 test(`is even and negative?`, (assertions) => {
-  function validateEvenAndNegative(num) {
-    let first = validateEven(num);
-    let second = validateNegative(num);
 
-    let errors = [];
-    let result = first.result && second.result;
+  assertions.equal(validateAnd(-2, validateEven, validateNegative), {
+    result: true
+  });
 
-    if (!first.result) {
-      errors.push(first.error);
-    }
-    if (!second.result) {
-      errors.push(second.error);
-    }
-
-    return result ? { result } : { result, errors };
-  }
-
-  assertions.equal(validateEvenAndNegative(-2), { result: true });
-  assertions.equal(validateEvenAndNegative(1), {
+  assertions.equal(validateAnd(1, validateEven, validateNegative), {
     result: false,
     errors: ["1 is not even", "1 is not negative"],
   });
-  assertions.equal(validateEvenAndNegative(2), {
+  assertions.equal(validateAnd(2, validateEven, validateNegative), {
     result: false,
     errors: ["2 is not negative"],
   });
 });
 
+
+test(`is even and positive?`, (assertions) => {
+
+  assertions.equal(validateAnd(2, validateEven, validatePositive), {
+    result: true
+  });
+  assertions.equal(validateAnd(-2, validateEven, validatePositive), {
+    result: false,
+    errors: ["-2 is not positive"]
+  });
+  assertions.equal(validateAnd(-1, validateEven, validatePositive), {
+    result: false,
+    errors: ["-1 is not even", "-1 is not positive"]
+  });
+});
+
 test(`even?`, (assertions) => {
-  assertions.equal(validateEven(2), { result: true });
-  assertions.equal(validateEven(3), { result: false, error: "3 is not even" });
+  assertions.equal(validateEven(2), {
+    result: true
+  });
+  assertions.equal(validateEven(3), {
+    result: false,
+    error: "3 is not even"
+  });
   assertions.equal(validateEven(-1), {
     result: false,
     error: "-1 is not even",
