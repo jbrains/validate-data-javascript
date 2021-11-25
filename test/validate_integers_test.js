@@ -1,4 +1,6 @@
-import { test } from "zora";
+import {
+  test
+} from "zora";
 
 function isPositive(num) {
   return num > 0;
@@ -39,7 +41,12 @@ function or(f, g) {
 
 function validate(num, validation, failureMessage) {
   let result = validation(num);
-  return result ? { result } : { result, error: failureMessage(num) };
+  return result ? {
+    result
+  } : {
+    result,
+    error: failureMessage(num)
+  };
 }
 
 function validateEven(num) {
@@ -55,7 +62,9 @@ test(`positive result?`, (assertions) => {
     return validate(num, isPositive, (num) => `${num} is not positive`);
   }
 
-  assertions.equal(validatePositive(37), { result: true });
+  assertions.equal(validatePositive(37), {
+    result: true
+  });
   assertions.equal(validatePositive(-1), {
     result: false,
     error: "-1 is not positive",
@@ -63,7 +72,9 @@ test(`positive result?`, (assertions) => {
 });
 
 test(`negative?`, (assertions) => {
-  assertions.equal(validateNegative(-1), { result: true });
+  assertions.equal(validateNegative(-1), {
+    result: true
+  });
   assertions.equal(validateNegative(1), {
     result: false,
     error: "1 is not negative",
@@ -71,14 +82,19 @@ test(`negative?`, (assertions) => {
 });
 
 test(`is even and negative?`, (assertions) => {
-  function foo(num, validateF, validateG) {
+  function validateAnd(num, validateF, validateG) {
     let first = validateF(num);
     let second = validateG(num);
 
     let result = first.result && second.result;
-    let errors = [ first, second ].map(each => each.error).filter(each => each);
+    let errors = [first, second].map(each => each.error).filter(each => each);
 
-    return result ? { result } : { result, errors };
+    return result ? {
+      result
+    } : {
+      result,
+      errors
+    };
   }
 
   function validateEvenAndNegative(num) {
@@ -86,25 +102,38 @@ test(`is even and negative?`, (assertions) => {
     let second = validateNegative(num);
 
     let result = first.result && second.result;
-    let errors = [ first, second ].map(each => each.error).filter(each => each);
+    let errors = [first, second].map(each => each.error).filter(each => each);
 
-    return result ? { result } : { result, errors };
+    return result ? {
+      result
+    } : {
+      result,
+      errors
+    };
   }
 
-  assertions.equal(validateEvenAndNegative(-2), { result: true });
-  assertions.equal(validateEvenAndNegative(1), {
+  assertions.equal(validateAnd(-2, validateEven, validateNegative), {
+    result: true
+  });
+
+  assertions.equal(validateAnd(1, validateEven, validateNegative), {
     result: false,
     errors: ["1 is not even", "1 is not negative"],
   });
-  assertions.equal(validateEvenAndNegative(2), {
+  assertions.equal(validateAnd(2, validateEven, validateNegative), {
     result: false,
     errors: ["2 is not negative"],
   });
 });
 
 test(`even?`, (assertions) => {
-  assertions.equal(validateEven(2), { result: true });
-  assertions.equal(validateEven(3), { result: false, error: "3 is not even" });
+  assertions.equal(validateEven(2), {
+    result: true
+  });
+  assertions.equal(validateEven(3), {
+    result: false,
+    error: "3 is not even"
+  });
   assertions.equal(validateEven(-1), {
     result: false,
     error: "-1 is not even",
