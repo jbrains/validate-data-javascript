@@ -104,6 +104,19 @@ test(`is even or negative?`, (assertions) => {
   assertions.equal(validateOr(-1, validateEven, validateNegative), {
     result: true,
   });
+
+  assertions.equal(validateOr(2, validateEven, validateNegative), {
+    result: true,
+  });
+
+  assertions.equal(validateOr(0, validateEven, validateNegative), {
+    result: true,
+  });
+
+  assertions.equal(validateOr(1, validateEven, validateNegative), {
+    result: false,
+    errors: ["1 is not even", "1 is not negative"]
+  });
 });
 
 test(`even?`, (assertions) => {
