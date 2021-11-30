@@ -46,16 +46,23 @@ test(`negative?`, (assertions) => {
 });
 
 const combineValidationsWithAnd = (...validations) => {
+
   const validateF = validations[0];
   const validateG = validations[1] || (() => ({ result: true }));
   const validateH = validations[2] || (() => ({ result: true }));
 
   return (num) => {
+    let result = true;
+
+    for (let validation of validations) {
+      let validationResult = validation(num);
+      result = result && validationResult.result;
+    }
+
     let first = validateF(num);
     let second = validateG(num);
     let third = validateH(num);
 
-    let result = first.result && second.result && third.result;
     let errors = [first, second, third]
       .map((each) => each.error)
       .filter((each) => each);
@@ -119,8 +126,8 @@ test(`is even and positive?`, (assertions) => {
 
 test(`is even or negative?`, (assertions) => {
   const evenOrNegativeValidation = combineValidationsWithOr(
-      validateEven,
-      validateNegative
+    validateEven,
+    validateNegative
   );
 
   assertions.equal(evenOrNegativeValidation(-2), {
@@ -160,24 +167,24 @@ test(`even?`, (assertions) => {
 });
 
 test(`Multiple validations for and?`, (assertions) => {
-
   function validate4(num) {
     return validate(
-        num,
-        (num) => num === 4,
-        (num) => `${num} is not 4`
+      num,
+      (num) => num === 4,
+      (num) => `${num} is not 4`
     );
   }
 
-  const validation = combineValidationsWithAnd(validateEven, validateNegative, validate4);
-
+  const validation = combineValidationsWithAnd(
+    validateEven,
+    validateNegative,
+    validate4
+  );
 
   assertions.equal(validation(-2), {
     result: false,
-    errors: [
-        '-2 is not 4'
-    ]
-  })
+    errors: ["-2 is not 4"],
+  });
 });
 
 test(`Combine 1 validation with and`, (assertions) => {
@@ -185,9 +192,24 @@ test(`Combine 1 validation with and`, (assertions) => {
 
   assertions.equal(validation(-2), {
     result: true,
-  })
+  });
   assertions.equal(validation(3), {
     result: false,
-    errors: ['3 is not even']
-  })
-})
+    errors: ["3 is not even"],
+  });
+});
+
+test(`Combine 4 validations with and`, (assertions) => {
+  const alwaysTrue = (ignored) => ({
+    result: true,
+  });
+
+  const validation = combineValidationsWithAnd(
+    validatePositive,
+    alwaysTrue,
+    alwaysTrue,
+    validateEven
+  );
+
+  assertions.equal(validation(3), { result: false, errors: ["3 is not even"] });
+});
