@@ -45,13 +45,18 @@ test(`negative?`, (assertions) => {
   });
 });
 
-const combineValidationsWithAnd = (validateF, validateG) => {
+const combineValidationsWithAnd = (...validations) => {
+  const validateF = validations[0];
+  const validateG = validations[1];
+  const validateH = validations[2] || (() => ({ result: true }));
+
   return (num) => {
     let first = validateF(num);
     let second = validateG(num);
+    let third = validateH(num);
 
-    let result = first.result && second.result;
-    let errors = [first, second]
+    let result = first.result && second.result && third.result;
+    let errors = [first, second, third]
       .map((each) => each.error)
       .filter((each) => each);
 
@@ -152,4 +157,25 @@ test(`even?`, (assertions) => {
     result: false,
     error: "-1 is not even",
   });
+});
+
+test(`Multiple validations for and?`, (assertions) => {
+
+  function validate4(num) {
+    return validate(
+        num,
+        (num) => num === 4,
+        (num) => `${num} is not 4`
+    );
+  }
+
+  const validation = combineValidationsWithAnd(validateEven, validateNegative, validate4);
+
+
+  assertions.equal(validation(-2), {
+    result: false,
+    errors: [
+        '-2 is not 4'
+    ]
+  })
 });
