@@ -46,25 +46,49 @@ test(`negative?`, (assertions) => {
 });
 
 function validateAnd(num, validateF, validateG) {
+  const combineValidationsWithAnd = (validateF, validateG) => {
+    return (num) => {
+      let first = validateF(num);
+      let second = validateG(num);
+    
+      let result = first.result && second.result;
+      let errors = [first, second].map((each) => each.error).filter((each) => each);
+    
+      return result ? { result } : { result, errors };
+    }
+  }
+
+  const validateFandG = combineValidationsWithAnd(validateF, validateG)
+
+  return validateFandG(num)
+}
+
+function validateOr(num, validateF, validateG) {
   let first = validateF(num);
   let second = validateG(num);
 
-  let result = first.result && second.result;
-  let errors = [first, second].map((each) => each.error).filter((each) => each);
+  let result = first.result || second.result;
+  let errors = [first, second]
+    .map((each) => each.error)
+    .filter((each) => each);
 
   return result ? { result } : { result, errors };
 }
 
+function validateEvenAndNegative (num) {
+  return validateAnd(num, validateEven, validateNegative);
+}
+
 test(`is even and negative?`, (assertions) => {
-  assertions.equal(validateAnd(-2, validateEven, validateNegative), {
+  assertions.equal(validateEvenAndNegative(-2), {
     result: true,
   });
 
-  assertions.equal(validateAnd(1, validateEven, validateNegative), {
+  assertions.equal(validateEvenAndNegative(1), {
     result: false,
     errors: ["1 is not even", "1 is not negative"],
   });
-  assertions.equal(validateAnd(2, validateEven, validateNegative), {
+  assertions.equal(validateEvenAndNegative(2), {
     result: false,
     errors: ["2 is not negative"],
   });
@@ -85,18 +109,7 @@ test(`is even and positive?`, (assertions) => {
 });
 
 test(`is even or negative?`, (assertions) => {
-  function validateOr(num, validateF, validateG) {
-    let first = validateF(num);
-    let second = validateG(num);
-
-    let result = first.result || second.result;
-    let errors = [first, second]
-      .map((each) => each.error)
-      .filter((each) => each);
-
-    return result ? { result } : { result, errors };
-  }
-
+  
   assertions.equal(validateOr(-2, validateEven, validateNegative), {
     result: true,
   });
