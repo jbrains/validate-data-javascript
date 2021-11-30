@@ -47,7 +47,7 @@ test(`negative?`, (assertions) => {
 
 const combineValidationsWithAnd = (...validations) => {
   const validateF = validations[0];
-  const validateG = validations[1];
+  const validateG = validations[1] || (() => ({ result: true }));
   const validateH = validations[2] || (() => ({ result: true }));
 
   return (num) => {
@@ -179,3 +179,11 @@ test(`Multiple validations for and?`, (assertions) => {
     ]
   })
 });
+
+test(`Combine 1 validation with and`, (assertions) => {
+  const validation = combineValidationsWithAnd(validateEven);
+
+  assertions.equal(validation(-2), {
+    result: true,
+  })
+})
