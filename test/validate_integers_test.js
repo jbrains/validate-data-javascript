@@ -186,4 +186,8 @@ test(`Combine 1 validation with and`, (assertions) => {
   assertions.equal(validation(-2), {
     result: true,
   })
+  assertions.equal(validation(3), {
+    result: false,
+    errors: ['3 is not even']
+  })
 })
