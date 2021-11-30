@@ -59,10 +59,6 @@ const combineValidationsWithAnd = (validateF, validateG) => {
   };
 };
 
-function validateAnd(num, validateF, validateG) {
-  return combineValidationsWithAnd(validateF, validateG)(num);
-}
-
 const combineValidationsWithOr = (validateF, validateG) => {
   return (num) => {
     let first = validateF(num);
@@ -76,10 +72,6 @@ const combineValidationsWithOr = (validateF, validateG) => {
     return result ? { result } : { result, errors };
   };
 };
-
-function validateOr(num, validateF, validateG) {
-  return combineValidationsWithOr(validateF, validateG)(num);
-}
 
 test(`is even and negative?`, (assertions) => {
   const evenAndNegativeValidation = combineValidationsWithAnd(
