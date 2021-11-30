@@ -63,14 +63,22 @@ function validateAnd(num, validateF, validateG) {
   return combineValidationsWithAnd(validateF, validateG)(num);
 }
 
+const combineValidationsWithOr = (validateF, validateG) => {
+  return (num) => {
+    let first = validateF(num);
+    let second = validateG(num);
+
+    let result = first.result || second.result;
+    let errors = [first, second]
+      .map((each) => each.error)
+      .filter((each) => each);
+
+    return result ? { result } : { result, errors };
+  };
+};
+
 function validateOr(num, validateF, validateG) {
-  let first = validateF(num);
-  let second = validateG(num);
-
-  let result = first.result || second.result;
-  let errors = [first, second].map((each) => each.error).filter((each) => each);
-
-  return result ? { result } : { result, errors };
+  return combineValidationsWithOr(validateF, validateG)(num);
 }
 
 test(`is even and negative?`, (assertions) => {
@@ -113,23 +121,28 @@ test(`is even and positive?`, (assertions) => {
 });
 
 test(`is even or negative?`, (assertions) => {
-  assertions.equal(validateOr(-2, validateEven, validateNegative), {
+  const evenOrNegativeValidation = combineValidationsWithOr(
+      validateEven,
+      validateNegative
+  );
+
+  assertions.equal(evenOrNegativeValidation(-2), {
     result: true,
   });
 
-  assertions.equal(validateOr(-1, validateEven, validateNegative), {
+  assertions.equal(evenOrNegativeValidation(-1), {
     result: true,
   });
 
-  assertions.equal(validateOr(2, validateEven, validateNegative), {
+  assertions.equal(evenOrNegativeValidation(2), {
     result: true,
   });
 
-  assertions.equal(validateOr(0, validateEven, validateNegative), {
+  assertions.equal(evenOrNegativeValidation(0), {
     result: true,
   });
 
-  assertions.equal(validateOr(1, validateEven, validateNegative), {
+  assertions.equal(evenOrNegativeValidation(1), {
     result: false,
     errors: ["1 is not even", "1 is not negative"],
   });
