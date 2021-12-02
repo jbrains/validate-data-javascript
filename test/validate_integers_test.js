@@ -5,8 +5,12 @@ function validate(num, validation, failureMessage) {
   return result ? {result} : {result, error: failureMessage(num)};
 }
 
-function alwaysTrue() {
-  return validate();
+function alwaysTrue(num) {
+  return { result: true };
+}
+
+function alwaysFalse(num) {
+  return { result: false, error: "alwaysFalse failed" };
 }
 
 
@@ -92,6 +96,10 @@ test(`is even and positive?`, (assertions) => {
 test(`test and combinator and the name should reflect it?`, (assertions) => {
   assertions.equal(validateAnd(2, alwaysTrue, alwaysTrue), {
     result: true,
+  });
+  assertions.equal(validateAnd(2, alwaysTrue, alwaysFalse), {
+    result: false,
+    errors: ["alwaysFalse failed"]
   });
 });
 
