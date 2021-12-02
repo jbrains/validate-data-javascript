@@ -66,24 +66,23 @@ function orPredicate(first, second) {
 }
 
 function validateAnd(num, validateF, validateG) {
+  return combinator(num, validateF, validateG, andPredicate);
+}
+
+function combinator(num, validateF, validateG, predicate) {
   let first = validateF(num);
   let second = validateG(num);
 
-  let result = andPredicate(first.result, second.result);
+  let result = predicate(first.result, second.result);
   let errors = [first, second].map((each) => each.error).filter((each) => each);
 
   return result ? { result } : { result, errors };
 }
 
 function validateOr(num, validateF, validateG) {
-  let first = validateF(num);
-  let second = validateG(num);
-
-  let result = orPredicate(first.result, second.result);
-  let errors = [first, second].map((each) => each.error).filter((each) => each);
-
-  return result ? { result } : { result, errors };
+  return combinator(num, validateF, validateG, orPredicate);
 }
+
 test(`is even and negative?`, (assertions) => {
   assertions.equal(validateAnd(-2, validateEven, validateNegative), {
     result: true,
