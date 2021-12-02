@@ -120,15 +120,19 @@ test(`test and combinator and the name should reflect it?`, (assertions) => {
     result: false,
     errors: ["alwaysFalse failed"],
   });
+
+  // TODO Unify this with alwaysFalse
+  function alwaysFalse2(errorMessage) {
+    return function(num) {
+      return { result: false, error: errorMessage };
+    }
+  }
+
   assertions.equal(
     validateAnd(
       2,
       alwaysTrue,
-      (function (errorMessage) {
-        return function (num) {
-          return alwaysFalse(num);
-        };
-      })("askdjfhadf")
+      alwaysFalse2("alwaysFalse failed")
     ),
     {
       result: false,
