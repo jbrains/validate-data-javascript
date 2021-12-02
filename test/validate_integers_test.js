@@ -57,16 +57,33 @@ test(`negative?`, (assertions) => {
   });
 });
 
+function andPredicate(first, second) {
+  return first && second;
+}
+
+function orPredicate(first, second) {
+  return first || second;
+}
+
 function validateAnd(num, validateF, validateG) {
   let first = validateF(num);
   let second = validateG(num);
 
-  let result = first.result && second.result;
+  let result = andPredicate(first.result, second.result);
   let errors = [first, second].map((each) => each.error).filter((each) => each);
 
   return result ? { result } : { result, errors };
 }
 
+function validateOr(num, validateF, validateG) {
+  let first = validateF(num);
+  let second = validateG(num);
+
+  let result = orPredicate(first.result, second.result);
+  let errors = [first, second].map((each) => each.error).filter((each) => each);
+
+  return result ? { result } : { result, errors };
+}
 test(`is even and negative?`, (assertions) => {
   assertions.equal(validateAnd(-2, validateEven, validateNegative), {
     result: true,
@@ -115,18 +132,6 @@ test(`test and combinator and the name should reflect it?`, (assertions) => {
 });
 
 test(`is even or negative?`, (assertions) => {
-  function validateOr(num, validateF, validateG) {
-    let first = validateF(num);
-    let second = validateG(num);
-
-    let result = first.result || second.result;
-    let errors = [first, second]
-      .map((each) => each.error)
-      .filter((each) => each);
-
-    return result ? { result } : { result, errors };
-  }
-
   assertions.equal(validateOr(-2, validateEven, validateNegative), {
     result: true,
   });
