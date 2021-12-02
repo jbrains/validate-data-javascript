@@ -6,13 +6,16 @@ function validate(num, validation, failureMessage) {
 }
 
 function alwaysTrue(num) {
-  return { result: true };
+  return validate(num, (num) => true, undefined);
 }
 
 function alwaysFalse(num) {
-  return { result: false, error: "alwaysFalse failed" };
+  return validate(
+    num,
+    (num) => false,
+    (num) => "alwaysFalse failed"
+  );
 }
-
 
 function validateEven(num) {
   return validate(
@@ -99,15 +102,15 @@ test(`test and combinator and the name should reflect it?`, (assertions) => {
   });
   assertions.equal(validateAnd(2, alwaysTrue, alwaysFalse), {
     result: false,
-    errors: ["alwaysFalse failed"]
+    errors: ["alwaysFalse failed"],
   });
   assertions.equal(validateAnd(2, alwaysFalse, alwaysTrue), {
     result: false,
-    errors: ["alwaysFalse failed"]
+    errors: ["alwaysFalse failed"],
   });
   assertions.equal(validateAnd(2, alwaysFalse, alwaysFalse), {
     result: false,
-    errors: ["alwaysFalse failed", "alwaysFalse failed"]
+    errors: ["alwaysFalse failed", "alwaysFalse failed"],
   });
 });
 
@@ -137,8 +140,8 @@ test(`is even or negative?`, (assertions) => {
   });
 
   assertions.equal(validateOr(3, validateEven, validateNegative), {
-    "result": false,
-    "errors": ["3 is not even", "3 is not negative"]
+    result: false,
+    errors: ["3 is not even", "3 is not negative"],
   });
 });
 
@@ -155,5 +158,3 @@ test(`even?`, (assertions) => {
     error: "-1 is not even",
   });
 });
-
-
