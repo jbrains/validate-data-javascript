@@ -5,6 +5,11 @@ function validate(num, validation, failureMessage) {
   return result ? {result} : {result, error: failureMessage(num)};
 }
 
+function alwaysTrue() {
+  return validate();
+}
+
+
 function validateEven(num) {
   return validate(
     num,
@@ -84,6 +89,12 @@ test(`is even and positive?`, (assertions) => {
   });
 });
 
+test(`test and combinator and the name should reflect it?`, (assertions) => {
+  assertions.equal(validateAnd(2, alwaysTrue, alwaysTrue), {
+    result: true,
+  });
+});
+
 test(`is even or negative?`, (assertions) => {
   function validateOr(num, validateF, validateG) {
     let first = validateF(num);
@@ -128,3 +139,5 @@ test(`even?`, (assertions) => {
     error: "-1 is not even",
   });
 });
+
+
