@@ -46,7 +46,6 @@ test(`negative?`, (assertions) => {
 });
 
 const combineValidationsWithAnd = (...validations) => {
-
   const validateF = validations[0];
   const validateG = validations[1] || (() => ({ result: true }));
   const validateH = validations[2] || (() => ({ result: true }));
